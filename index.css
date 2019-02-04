@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.body-wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.clock-wrapper {
+  width: 90%;
+  max-width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.clock-wrapper .center {
+  height: 5px;
+  width: 5px;
+  background: white;
+  border: 2px solid rgb(221, 33, 4);
+  border-radius: 100%;
+  position: absolute;
+  z-index: 100;
+}
+
+.clock-wrapper .min-hand{
+  width: 2px;
+  position: absolute;
+  height:0px;
+  height: 125px;
+  background-color: rgb(10, 10, 10);
+  transform-origin: bottom center;
+  top: 0;
+  z-index: 2;
+  transition: transform 200ms;
+}
+
+.clock-wrapper .hour-hand{
+  width: 2px;
+  position: absolute;
+  height:0px;
+  height: 75px;
+  background-color: rgb(186, 184, 188);
+  transform-origin: bottom center;
+  top: 50px;
+  z-index: 1;
+  transition: transform 200ms;
+}
+
+.clock-wrapper .sec-hand{
+  width: 2px;
+  position: absolute;
+  height:0px;
+  height:125px;
+  background-color: rgb(221, 33, 4);
+  transform-origin: bottom center;
+  top: 0px;
+  z-index: 2;
+  transition: transform 200ms;
+}
+
+.body-wrapper .time {
+  font-size: 5rem;
+  text-align: center;
+}
+
+.body-wrapper .date {
+  text-align: center;
+  color: rgb(137, 136, 139);
+}
