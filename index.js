@@ -1,35 +1,69 @@
-const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-const DAYNAME = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+$( document ).ready(function(){
+  const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const DAYNAME = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
-// initial set clock
-setClock();
+  let prevHourDeg = 0;
+  let prevMinDeg = 0;
+  let prevSecDeg = 0;
+  //all elements we are using
+  const $hourHand = $('.clock-wrapper .hour-hand');
+  const $minHand = $('.clock-wrapper .min-hand');
+  const $secHand = $('.clock-wrapper .sec-hand');
+  const $hourText = $('.time-wrapper #hour');
+  const $minText = $('.time-wrapper #min');
+  const $monthText = $('.time-wrapper #month');
+  const $dayText = $('.time-wrapper #day');
+  const $dayNameText = $('.time-wrapper #day-name');
 
-setInterval(()=>{
+  // initial set clock
   setClock();
-}, 1000);
 
-function setClock(){
-  let date = new Date();
-  let hour = date.getHours();
-  let min = date.getMinutes();
-  let sec = date.getSeconds();
-  setTime(hour, min, sec);
-  let month = MONTHS[date.getMonth()];
-  let day = date.getDate();
-  let dayName = DAYNAME[date.getDay()];
-  setDate(month, day, dayName);
-}
+  setInterval(setClock, 1000);
 
-function setTime(hour, min, sec){
-  $('.clock-wrapper .hour-hand').css('transform', `rotate(${hour*30}deg)`);
-  $('.clock-wrapper .min-hand').css('transform', `rotate(${min*6}deg)`);
-  $('.clock-wrapper .sec-hand').css('transform', `rotate(${sec*6}deg)`);
-  $('.time-wrapper #hour').text(hour);
-  $('.time-wrapper #min').text(min);
-}
+  // set the whole thing in motion (sets clock and date, main function);
+  function setClock(){
+    let date = new Date();
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+    setTime(hour, min, sec);
+    let month = MONTHS[date.getMonth()];
+    let day = date.getDate();
+    let dayName = DAYNAME[date.getDay()];
+    setDate(month, day, dayName);
+  }
 
-function setDate(month, day, dayName){
-  $('.time-wrapper #month').text(month);
-  $('.time-wrapper #day').text(` ${day}`); //adds space and day
-  $('.time-wrapper #day-name').text(dayName);
-}
+  // sets the time part. the clock and the time text
+  function setTime(hour, min, sec){
+    if(sec == 0) smoothTransitionReset($secHand, sec, prevSecDeg*6);
+    else $secHand.css('transform', `rotate(${sec*6}deg)`);
+    if(min == 0) smoothTransitionReset($minHand, min, prevMinDeg*6);
+    else $minHand.css('transform', `rotate(${min*6}deg)`);
+    if(hour == 0) smoothTransitionReset($hourHand, hour, prevHourDeg);
+    else $hourHand.css('transform', `rotate(${hour*30}deg)`);
+    $hourText.text(hour);
+    $minText.text(min < 10 ? `0${min}` : min);
+    prevHourDev = hour;
+    prevMinDeg = min;
+    prevSecDeg = sec;
+  }
+
+  // sets the date text 
+  function setDate(month, day, dayName){
+    $monthText.text(month);
+    $dayText.text(` ${day}`);
+    $dayNameText.text(dayName);
+  }
+
+  // makes the transition smooth when going from a degree to 0 degrees
+  function smoothTransitionReset(el, nextTime, prevTime){
+    let inverDeg =  -1 * (360 - prevTime);
+    el.css('transition', 'transform 0');
+    el.css('transform', `rotate(${inverDeg}deg)`)
+    // gotta delay the transition so it won't be that instant
+    setTimeout(()=>{
+      el.css({'transition': 'transform 200ms'});
+      el.css('transform', `rotate(0deg)`);
+    }, 1)
+  }
+});
