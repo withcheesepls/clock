@@ -39,11 +39,11 @@ $( document ).ready(function(){
     else $secHand.css('transform', `rotate(${sec*6}deg)`);
     if(min == 0 && prevMinDeg != min) smoothTransitionReset($minHand, min, prevMinDeg*6);
     else $minHand.css('transform', `rotate(${min*6}deg)`);
-    if(hour == 0 && prevHourDeg != hour) smoothTransitionReset($hourHand, hour, prevHourDeg);
+    if(hour == 0 && prevHourDeg != hour) smoothTransitionReset($hourHand, hour, (prevHourDeg*30)%360);
     else $hourHand.css('transform', `rotate(${hour*30}deg)`);
     $hourText.text(hour);
     $minText.text(min < 10 ? `0${min}` : min);
-    prevHourDev = hour;
+    prevHourDeg = hour;
     prevMinDeg = min;
     prevSecDeg = sec;
   }
@@ -56,8 +56,8 @@ $( document ).ready(function(){
   }
 
   // makes the transition smooth when going from a degree to 0 degrees
-  function smoothTransitionReset(el, nextTime, prevTime){
-    let inverDeg =  -1 * (360 - prevTime);
+  function smoothTransitionReset(el, nextTime, prevAngle){
+    let inverDeg =  -1 * (360 - prevAngle);
     el.css('transition', 'transform 0');
     el.css('transform', `rotate(${inverDeg}deg)`)
     // gotta delay the transition so it won't be that instant
