@@ -35,11 +35,11 @@ $( document ).ready(function(){
 
   // sets the time part. the clock and the time text
   function setTime(hour, min, sec){
-    if(sec == 0) smoothTransitionReset($secHand, sec, prevSecDeg*6);
+    if(sec == 0 && prevSecDeg != sec) smoothTransitionReset($secHand, sec, prevSecDeg*6);
     else $secHand.css('transform', `rotate(${sec*6}deg)`);
-    if(min == 0) smoothTransitionReset($minHand, min, prevMinDeg*6);
+    if(min == 0 && prevMinDeg != min) smoothTransitionReset($minHand, min, prevMinDeg*6);
     else $minHand.css('transform', `rotate(${min*6}deg)`);
-    if(hour == 0) smoothTransitionReset($hourHand, hour, prevHourDeg);
+    if(hour == 0 && prevHourDeg != hour) smoothTransitionReset($hourHand, hour, prevHourDeg);
     else $hourHand.css('transform', `rotate(${hour*30}deg)`);
     $hourText.text(hour);
     $minText.text(min < 10 ? `0${min}` : min);
@@ -48,7 +48,7 @@ $( document ).ready(function(){
     prevSecDeg = sec;
   }
 
-  // sets the date text 
+  // sets the date text
   function setDate(month, day, dayName){
     $monthText.text(month);
     $dayText.text(` ${day}`);
